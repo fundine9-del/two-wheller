@@ -10,6 +10,7 @@ type AppContextValue = {
   trips: Trip[]
   gallery: Gallery[]
   home: Home | null
+  ready: boolean
   user: User | null
   admin: boolean
   authError: string
@@ -28,9 +29,10 @@ type AppContextValue = {
 const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [trips, setTrips] = useState<Trip[]>(sample)
+  const [trips, setTrips] = useState<Trip[]>([])
   const [gallery, setGallery] = useState<Gallery[]>([])
   const [home, setHome] = useState<Home | null>(null)
+  const [ready, setReady] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [admin, setAdmin] = useState(false)
   const [authError, setAuthError] = useState('')
@@ -39,7 +41,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState('')
 
   const load = useCallback(async () => {
-    if (!db) return
+    if (!db) {
+      setTrips(sample)
+      return
+    }
     const [t, g, h] = await Promise.all([
       db.from('trips').select('*').order('date', { ascending: false }),
       db.from('gallery_images').select('*').order('created_at', { ascending: false }),
@@ -63,16 +68,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch
-    load()
-    if (!db) return
+    let active = true
+    const init = async () => {
+      await load()
+      if (active) setReady(true)
+    }
+    void init()
+    if (!db) {
+      return () => {
+        active = false
+      }
+    }
     db.auth.getUser().then(({ data }) => checkRole(data.user))
     const {
       data: { subscription },
     } = db.auth.onAuthStateChange((_event, session) => {
       checkRole(session?.user ?? null)
     })
-    return () => subscription.unsubscribe()
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
   }, [load, checkRole])
 
   const signOut = useCallback(async () => {
@@ -85,6 +101,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         trips,
         gallery,
         home,
+        ready,
         user,
         admin,
         authError,
