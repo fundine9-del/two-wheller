@@ -1,0 +1,13 @@
+-- Run in Supabase SQL Editor, then add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.
+create extension if not exists "uuid-ossp";
+create table if not exists public.profiles (id uuid primary key references auth.users(id) on delete cascade,full_name text,role text not null default 'member' check(role in('member','admin')),created_at timestamptz not null default now());
+create table if not exists public.trips (id uuid primary key default uuid_generate_v4(),title text not null,date date not null,location text not null,distance text not null,description text not null,ride_type text not null default 'Group Ride',status text not null default 'upcoming' check(status in('upcoming','past')),cover_image text,featured boolean not null default false,created_at timestamptz not null default now());
+create table if not exists public.gallery_images (id uuid primary key default uuid_generate_v4(),trip_id uuid references public.trips(id) on delete set null,image_url text not null,caption text,created_at timestamptz not null default now());
+alter table public.profiles enable row level security; alter table public.trips enable row level security; alter table public.gallery_images enable row level security;
+create or replace function public.is_admin() returns boolean language sql stable security definer set search_path=public as $$select exists(select 1 from public.profiles where id=auth.uid() and role='admin')$$;
+create policy "Public view trips" on public.trips for select using(true); create policy "Admins manage trips" on public.trips for all to authenticated using(public.is_admin()) with check(public.is_admin());
+create policy "Public view gallery" on public.gallery_images for select using(true); create policy "Admins manage gallery" on public.gallery_images for all to authenticated using(public.is_admin()) with check(public.is_admin());
+create policy "Own profile" on public.profiles for select to authenticated using(id=auth.uid());
+insert into storage.buckets(id,name,public) values('ride-media','ride-media',true) on conflict(id) do nothing;
+create policy "Public media view" on storage.objects for select using(bucket_id='ride-media'); create policy "Admins upload media" on storage.objects for insert to authenticated with check(bucket_id='ride-media' and public.is_admin()); create policy "Admins update media" on storage.objects for update to authenticated using(bucket_id='ride-media' and public.is_admin()); create policy "Admins delete media" on storage.objects for delete to authenticated using(bucket_id='ride-media' and public.is_admin());
+-- After creating your first auth user: insert into public.profiles(id,full_name,role) values('AUTH-USER-UUID','Admin','admin');

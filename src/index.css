@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-silver: #c2baba;
+  --color-brown: #705039;
+  --color-amber: #d47c40;
+  --color-slate: #4a535c;
+  --color-charcoal: #1b1c1c;
+  --font-sans: 'Manrope', Arial, sans-serif;
+  --font-display: 'Barlow Condensed', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #1b1c1c;
+  color: #c2baba;
+  font-family: 'Manrope', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
