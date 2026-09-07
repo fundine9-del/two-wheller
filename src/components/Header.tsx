@@ -17,8 +17,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-[82px] items-center gap-8 border-b border-slate bg-charcoal px-[7%]">
-      <Link to="/" onClick={close} aria-label="The Two Wheelers home" className="block max-sm:h-[52px] max-sm:w-[88px] lg:w-[130px] lg:h-[66px]">
+      <Link to="/" onClick={close} aria-label="The Two Wheelers home" className="flex items-center gap-3">
         <img className="h-[52px] w-[88px] object-contain lg:h-[66px] lg:w-[130px]" src={logo} alt="The Two Wheelers" />
+        <span className="font-display leading-none">
+          <b className="block text-[13px] font-extrabold uppercase tracking-wide text-silver sm:text-base lg:text-lg">
+            The Two Wheelers
+          </b>
+        </span>
       </Link>
       <nav
         className={`flex-1 max-lg:absolute max-lg:left-0 max-lg:right-0 max-lg:top-[69px] max-lg:flex-col max-lg:gap-0 max-lg:bg-charcoal max-lg:px-5 max-lg:py-3 lg:flex lg:gap-7 ${
@@ -47,11 +52,11 @@ export default function Header() {
         </i>
       </div>
       <button
-        className="ml-auto border-0 bg-transparent text-white lg:hidden"
+        className="ml-auto flex h-16 w-16 items-center justify-center border-0 bg-transparent text-silver lg:hidden"
         onClick={() => setOpen((v) => !v)}
         aria-label="Toggle navigation"
       >
-        {open ? <X /> : <Menu />}
+        {open ? <X size={60} /> : <Menu size={60} />}
       </button>
     </header>
   )
