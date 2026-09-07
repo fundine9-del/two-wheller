@@ -1,14 +1,11 @@
 import Eyebrow from '../components/Eyebrow'
-import { Mountain } from '../icons'
+import about from '../../about.webp'
 
 export default function About() {
   return (
     <section className="mx-auto grid max-w-[1200px] grid-cols-[1.2fr_1fr] items-start gap-14 px-[7%] pb-[70px] pt-[110px] max-md:grid-cols-1 max-md:gap-8 max-md:pt-[70px]">
-      <div
-        className="grid h-[360px] place-items-center rounded-xl text-amber"
-        style={{ background: 'radial-gradient(circle at 45% 45%, #705039, #1b1c1c 68%)' }}
-      >
-        <Mountain size={105} />
+      <div className="h-[360px] overflow-hidden rounded-xl">
+        <img src={about} alt="Two Wheelers community" className="h-full w-full object-cover" />
       </div>
       <div>
         <Eyebrow>OUR STORY</Eyebrow>
