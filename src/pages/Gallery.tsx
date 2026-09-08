@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import Eyebrow from '../components/Eyebrow'
+import Lightbox from '../components/Lightbox'
 import { Image } from '../icons'
 
 export default function Gallery() {
   const { gallery } = useApp()
+  const [lightbox, setLightbox] = useState<number | null>(null)
 
   return (
     <>
@@ -19,10 +22,16 @@ export default function Gallery() {
 
       <section className="mx-auto grid max-w-[1200px] grid-cols-3 gap-4 px-[7%] py-[70px] max-md:grid-cols-2 max-sm:grid-cols-1">
         {gallery.length ? (
-          gallery.map((photo) => (
+          gallery.map((photo, i) => (
             <figure
               key={photo.id}
-              className="m-0 flex h-[306px] items-end rounded-lg bg-slate bg-cover bg-center p-4"
+              onClick={() => setLightbox(i)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setLightbox(i)
+              }}
+              role="button"
+              tabIndex={0}
+              className="m-0 flex h-[306px] cursor-zoom-in items-end rounded-lg bg-slate bg-cover bg-center p-4"
               style={{ backgroundImage: `url("${photo.image_url}")` }}
             >
               <figcaption className="text-xs font-bold text-white">{photo.caption}</figcaption>
@@ -31,11 +40,20 @@ export default function Gallery() {
         ) : (
           <div className="col-span-full grid min-h-[300px] place-content-center rounded-lg border border-dashed border-silver/30 text-center text-silver/70">
             <Image size={40} className="mx-auto text-amber" />
-            <h3 className="mt-3 text-lg font-bold text-silver">Your ride gallery will appear here</h3>
+            <h3 className="mt-3 text-lg font-bold text-silver">Your ride highlights will appear here</h3>
             <p className="mt-1">Upload photos from the admin area and they display automatically.</p>
           </div>
         )}
       </section>
+
+      {lightbox !== null && gallery[lightbox] && (
+        <Lightbox
+          items={gallery.map((g) => ({ url: g.image_url, caption: g.caption }))}
+          index={lightbox}
+          onClose={() => setLightbox(null)}
+          onNavigate={setLightbox}
+        />
+      )}
     </>
   )
 }

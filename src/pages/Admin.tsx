@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { ChangeEvent, FormEvent } from 'react'
 import Eyebrow from '../components/Eyebrow'
@@ -18,6 +19,7 @@ export default function Admin() {
   const homeDraft = readDraft('home')
   const tripDraft = readDraft('trip')
   const galleryDraft = readDraft('gallery')
+  const [tripStatus, setTripStatus] = useState<'upcoming' | 'past'>(tripDraft.status === 'past' ? 'past' : 'upcoming')
 
   const persist = (name: string) => (e: ChangeEvent<HTMLFormElement>) => {
     const target = e.target as unknown as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -76,6 +78,8 @@ export default function Admin() {
         ride_type: f.get('ride_type'),
         status: f.get('status'),
         cover_image: cover,
+        photos_link: f.get('photos_link') ? String(f.get('photos_link')) : null,
+        videos_link: f.get('videos_link') ? String(f.get('videos_link')) : null,
       })
       if (error) throw error
       form.reset()
@@ -104,7 +108,7 @@ export default function Admin() {
       form.reset()
       clearDraft('gallery')
       await load()
-      setMessage('Gallery photo published.')
+      setMessage('Highlight photo published.')
     } catch (e) {
       setMessage(e instanceof Error ? e.message : 'Could not upload photo.')
     }
@@ -179,7 +183,12 @@ export default function Admin() {
           <input name="title" defaultValue={tripDraft.title || ''} placeholder="Trip title" required className={inputClass} />
           <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
             <input name="date" type="date" defaultValue={tripDraft.date || ''} required className={inputClass} />
-            <select name="status" defaultValue={tripDraft.status || 'upcoming'} className={`${inputClass} bg-slate text-silver`}>
+            <select
+              name="status"
+              value={tripStatus}
+              onChange={(e) => setTripStatus(e.target.value as 'upcoming' | 'past')}
+              className={`${inputClass} bg-slate text-silver`}
+            >
               <option value="upcoming">Upcoming</option>
               <option value="past">Past / archive</option>
             </select>
@@ -191,6 +200,12 @@ export default function Admin() {
           </div>
           <textarea name="description" defaultValue={tripDraft.description || ''} placeholder="Trip description" rows={4} required className={`${inputClass} resize-y`} />
           <ImageInput name="image" label="Trip cover image" />
+          {tripStatus === 'past' && (
+            <>
+              <input name="photos_link" defaultValue={tripDraft.photos_link || ''} placeholder="Photos link (Google Drive, album URL...)" className={inputClass} />
+              <input name="videos_link" defaultValue={tripDraft.videos_link || ''} placeholder="Videos link (YouTube, playlist URL...)" className={inputClass} />
+            </>
+          )}
           <button
             className="inline-flex items-center justify-center gap-2.5 rounded bg-amber px-4 py-3 text-[13px] font-extrabold text-charcoal hover:bg-amber/90 disabled:opacity-50"
             disabled={busy}
@@ -206,7 +221,7 @@ export default function Admin() {
           onSubmit={gallerySubmit}
           onChange={persist('gallery')}
         >
-          <h3 className="text-lg font-bold">Add gallery photo</h3>
+          <h3 className="text-lg font-bold">Add highlight photo</h3>
           <input name="caption" defaultValue={galleryDraft.caption || ''} placeholder="Photo caption" className={inputClass} />
           <ImageInput name="image" label="Image" required />
           <button

@@ -9,11 +9,13 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className="min-h-[calc(100vh-82px)]">
+      <main className="min-h-[calc(100vh-100px)] lg:min-h-[calc(100vh-126px)]">
         {ready ? (
           <Outlet />
         ) : (
-          <div className="grid min-h-[calc(100vh-82px)] place-items-center text-silver/60">Loading…</div>
+          <div className="grid min-h-[calc(100vh-100px)] place-items-center text-silver/60 lg:min-h-[calc(100vh-126px)]">
+            Loading…
+          </div>
         )}
       </main>
       <Footer />

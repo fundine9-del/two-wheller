@@ -6,7 +6,7 @@ import logo from '../../logo_converted.webp'
 const nav = [
   { to: '/', label: 'Home', end: true },
   { to: '/trips', label: 'Trips' },
-  { to: '/gallery', label: 'Gallery' },
+  { to: '/gallery', label: 'Highlights' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ]
@@ -16,17 +16,17 @@ export default function Header() {
   const close = () => setOpen(false)
 
   return (
-    <header className="sticky top-0 z-10 flex h-[82px] items-center gap-8 border-b border-slate bg-charcoal px-[7%]">
+    <header className="sticky top-0 z-10 flex h-[100px] items-center gap-8 border-b border-slate bg-charcoal px-[7%] lg:h-[126px]">
       <Link to="/" onClick={close} aria-label="The Two Wheelers home" className="flex items-center gap-3">
-        <img className="h-[52px] w-[88px] object-contain lg:h-[66px] lg:w-[130px]" src={logo} alt="The Two Wheelers" />
+        <img className="h-[78px] w-[132px] object-contain lg:h-[99px] lg:w-[195px]" src={logo} alt="The Two Wheelers" />
         <span className="font-display leading-none">
-          <b className="block text-[13px] font-extrabold uppercase tracking-wide text-silver sm:text-base lg:text-lg">
+          <b className="block text-[19px] font-extrabold uppercase tracking-wide text-silver sm:text-2xl lg:text-[27px]">
             The Two Wheelers
           </b>
         </span>
       </Link>
       <nav
-        className={`flex-1 max-lg:absolute max-lg:left-0 max-lg:right-0 max-lg:top-[69px] max-lg:flex-col max-lg:gap-0 max-lg:bg-charcoal max-lg:px-5 max-lg:py-3 lg:flex lg:gap-7 ${
+        className={`flex-1 max-lg:absolute max-lg:left-0 max-lg:right-0 max-lg:top-[100px] max-lg:flex-col max-lg:gap-0 max-lg:bg-charcoal max-lg:px-5 max-lg:py-3 lg:flex lg:gap-7 ${
           open ? 'max-lg:flex' : 'max-lg:hidden'
         }`}
       >

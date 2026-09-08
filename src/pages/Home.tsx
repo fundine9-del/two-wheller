@@ -83,7 +83,7 @@ export default function Home() {
             </h2>
           </div>
           <Link to="/gallery" className="mb-1 inline-flex items-center gap-2 text-[13px] font-extrabold text-amber hover:underline">
-            View full gallery →
+            View full highlights →
           </Link>
         </div>
         {preview.length ? (
@@ -101,7 +101,7 @@ export default function Home() {
         ) : (
           <div className="mt-8 grid min-h-[300px] place-content-center rounded-lg border border-dashed border-silver/30 text-center text-silver/70">
             <Image size={40} className="mx-auto text-amber" />
-            <h3 className="mt-3 text-lg font-bold text-silver">Your ride gallery will appear here</h3>
+            <h3 className="mt-3 text-lg font-bold text-silver">Your ride highlights will appear here</h3>
             <p className="mt-1">Upload photos from the admin area and they display automatically.</p>
           </div>
         )}

@@ -9,6 +9,8 @@ export type Trip = {
   description: string
   ride_type: string
   cover_image: string | null
+  photos_link: string | null
+  videos_link: string | null
   status: 'upcoming' | 'past'
 }
 
@@ -70,6 +72,8 @@ export const sample: Trip[] = [
     description: 'A scenic ride with open views, fresh air and brotherhood vibes.',
     ride_type: 'Group Ride',
     cover_image: null,
+    photos_link: null,
+    videos_link: null,
     status: 'upcoming',
   },
   {
@@ -81,6 +85,8 @@ export const sample: Trip[] = [
     description: 'Relax, recharge and enjoy the natural hot springs of Naivasha.',
     ride_type: 'Group Ride',
     cover_image: null,
+    photos_link: null,
+    videos_link: null,
     status: 'upcoming',
   },
 ]

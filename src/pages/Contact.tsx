@@ -33,25 +33,7 @@ export default function Contact() {
         </article>
       </div>
 
-      <form className="grid w-full gap-4" onSubmit={(e) => e.preventDefault()}>
-        <input
-          placeholder="Your name"
-          className="w-full rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
-        />
-        <input
-          placeholder="Email address"
-          type="email"
-          className="w-full rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
-        />
-        <textarea
-          placeholder="Tell us what's on your mind"
-          rows={5}
-          className="w-full resize-y rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
-        />
-        <button className="inline-flex items-center gap-2.5 justify-center rounded bg-amber px-4 py-3 text-[13px] font-extrabold text-charcoal hover:bg-amber/90">
-          Send message <ArrowRight size={16} />
-        </button>
-      </form>
+      
     </section>
   )
 }

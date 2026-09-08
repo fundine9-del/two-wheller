@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import Eyebrow from '../components/Eyebrow'
-import { ArrowRight, CalendarDays, MapPin, Mountain, Users } from '../icons'
+import { ArrowRight, CalendarDays, Image, MapPin, Mountain, Play, Users } from '../icons'
 import { cover, fmt } from '../types'
 import { WHATSAPP_URL } from '../lib/supabase'
 
@@ -64,6 +64,30 @@ export default function TripDetails() {
               <dd className="text-[13px] font-bold">{chosen.distance}</dd>
             </div>
           </dl>
+          {chosen.status === 'past' && (chosen.photos_link || chosen.videos_link) && (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {chosen.photos_link && (
+                <a
+                  href={chosen.photos_link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2.5 rounded border border-amber px-4 py-3 text-[13px] font-extrabold text-amber hover:bg-amber/10"
+                >
+                  <Image size={16} /> View photos
+                </a>
+              )}
+              {chosen.videos_link && (
+                <a
+                  href={chosen.videos_link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2.5 rounded border border-amber px-4 py-3 text-[13px] font-extrabold text-amber hover:bg-amber/10"
+                >
+                  <Play size={16} /> View videos
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </>

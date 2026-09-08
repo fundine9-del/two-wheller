@@ -35,6 +35,8 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
         ride_type: String(form.get('ride_type')),
         status: String(form.get('status')) as Trip['status'],
         cover_image,
+        photos_link: form.get('photos_link') ? String(form.get('photos_link')) : null,
+        videos_link: form.get('videos_link') ? String(form.get('videos_link')) : null,
       }
       const { error } = await db.from('trips').update(data).eq('id', editingTrip.id)
       if (error) throw error
@@ -62,9 +64,9 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
       if (error) throw error
       setEditingGallery(null)
       await reload()
-      notify('Gallery photo updated.')
+      notify('Highlight photo updated.')
     } catch (error) {
-      notify(error instanceof Error ? error.message : 'Could not update gallery photo.')
+      notify(error instanceof Error ? error.message : 'Could not update highlight photo.')
     }
     setSaving(false)
   }
@@ -106,7 +108,8 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
               />
               <select
                 name="status"
-                defaultValue={editingTrip.status}
+                value={editingTrip.status}
+                onChange={(e) => setEditingTrip({ ...editingTrip, status: e.target.value as Trip['status'] })}
                 className="w-full rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none"
               >
                 <option value="upcoming">Upcoming</option>
@@ -141,6 +144,22 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
               className="w-full resize-y rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
             />
             <ImageInput name="image" label="Replace cover image" />
+            {editingTrip.status === 'past' && (
+              <>
+                <input
+                  name="photos_link"
+                  defaultValue={editingTrip.photos_link || ''}
+                  placeholder="Photos link (Google Drive, album URL...)"
+                  className="w-full rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
+                />
+                <input
+                  name="videos_link"
+                  defaultValue={editingTrip.videos_link || ''}
+                  placeholder="Videos link (YouTube, playlist URL...)"
+                  className="w-full rounded-lg border border-slate bg-slate px-4 py-3 text-silver outline-none placeholder:text-silver/50"
+                />
+              </>
+            )}
             <div className="flex items-center gap-2">
               <button
                 className="inline-flex items-center justify-center rounded bg-amber px-4 py-3 text-[13px] font-extrabold text-charcoal hover:bg-amber/90 disabled:opacity-50"
@@ -194,7 +213,7 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
   if (tab === 'gallery') {
     return (
       <div className="mx-auto mt-7 w-[min(100%,900px)]">
-        <h3 className="mb-3.5 text-lg font-bold">Posted gallery photos</h3>
+        <h3 className="mb-3.5 text-lg font-bold">Posted highlights</h3>
         {editingGallery && (
           <form className="mb-6 grid gap-3.5 rounded-lg border border-slate bg-slate/20 p-7" onSubmit={saveGallery}>
             <input
@@ -250,7 +269,7 @@ export default function AdminManagement({ tab, trips, gallery, reload, notify }:
             </article>
           ))
         ) : (
-          <p className="text-xs text-silver/70">No gallery photos yet.</p>
+          <p className="text-xs text-silver/70">No highlights yet.</p>
         )}
       </div>
     )
